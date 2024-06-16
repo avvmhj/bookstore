@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Book Haven</title>
+    <link rel="stylesheet" href="try.css">
+   
+</head>
+<body>
+    <h1 class="haven">The Book Haven</h1>
+    <div class="container">
+       
+        <div class="list">
+          <h2 class="list1">Book List:</h2>
+          <ul id="book-list"></ul>
+          <h2 class="list1">Favorite Books:</h2>
+          <ul id="favorite-list"></ul>
+      </div>
+       <form class="form" onsubmit="return false;">
+            <input type="text" id="searchBar" placeholder="Search for books..." oninput="filterBooks()">
+            <input type="text" id="newBookTitle" placeholder="New book title">
+            <button id="addBookButton" onclick="addBook()">Add Book</button>
+        </form>
+  
+    </div>
+
+    <script>
+        function addBook() {
+            var newBookTitle = document.getElementById('newBookTitle').value;
+            if (newBookTitle.trim() !== "") {
+                var bookList = document.getElementById('book-list');
+                var li = document.createElement('li');
+                li.textContent = newBookTitle;
+
+               
+                var buttons = document.createElement('div');
+                buttons.classList.add('buttons');
+
+                var favoriteButton = document.createElement('button');
+                favoriteButton.textContent = 'Favorite';
+                favoriteButton.onclick = function() {
+                    toggleFavorite(li);
+                };
+
+                var removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = function() {
+                    var parentList = li.parentNode;
+                    parentList.removeChild(li);
+                };
+
+                buttons.appendChild(favoriteButton);
+                buttons.appendChild(removeButton);
+                li.appendChild(buttons);
+
+                bookList.appendChild(li);
+                document.getElementById('newBookTitle').value = "";
+            }
+        }
+
+        function toggleFavorite(li) {
+            var favoriteList = document.getElementById('favorite-list');
+            var bookList = document.getElementById('book-list');
+
+            if (li.classList.contains('favorite')) {
+                li.classList.remove('favorite');
+                bookList.appendChild(li);
+            } else {
+                li.classList.add('favorite');
+                favoriteList.appendChild(li);
+            }
+        }
+
+        function filterBooks() {
+            var filter = document.getElementById('searchBar').value.toLowerCase();
+            var bookList = document.getElementById('book-list');
+            var favoriteList = document.getElementById('favorite-list');
+            var books = bookList.getElementsByTagName('li');
+            var favorites = favoriteList.getElementsByTagName('li');
+
+            filterList(books, filter);
+            filterList(favorites, filter);
+        }
+
+        function filterList(list, filter) {
+            for (var i = 0; i < list.length; i++) {
+                var bookTitle = list[i].childNodes[0].nodeValue;
+                if (bookTitle.toLowerCase().indexOf(filter) > -1) {
+                    list[i].style.display = "";
+                } else {
+                    list[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
